@@ -12,17 +12,16 @@ function index(req, res) {
 }
 
 function show(req, res) {
-    const postId = req.params.id
-    const post = blog.find(post => post.id === Number(postId))
-    console.log(post);
+    const postId = Number(req.params.id)
 
-    if (!post) {
-        return res.status(404).json({
-            error: '404',
-            message: 'Post not found'
-        })
-    }
-    res.json(post)
+    const sql = 'SELECT * FROM posts WHERE id = ?'
+
+    connection.query(sql, [postId], (err, results) => {
+        if (err) return res.status(500).json({ message: 'Query failed' })
+        if (results.length === 0) return res.status(404).json({ message: 'Post not found' })
+        res.json(results[0])
+    })
+
 }
 
 function store(req, res) {
