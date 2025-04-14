@@ -8,4 +8,9 @@ const connection = mysql.createConnection({
     port: process.env.DB_PORT
 });
 
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('Connected to MySQL!');
+})
+
 module.exports = connection;
