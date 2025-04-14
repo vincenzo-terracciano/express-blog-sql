@@ -1,4 +1,4 @@
-
+const db = require('../data/db')
 
 function index(req, res) {
     let filteredBlog = blog
