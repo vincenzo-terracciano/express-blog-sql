@@ -89,19 +89,19 @@ function modify(req, res) {
 }
 
 function destroy(req, res) {
-    const postSlug = req.params.slug
-    const post = blog.find(post => post.slug === postSlug)
+    const postId = Number(req.params.id)
+    console.log("postId:", postId);
 
-    if (!post) {
-        return res.status(404).json({
-            error: '404',
-            message: 'Post not found'
-        })
-    }
-    blog.splice(blog.indexOf(post), 1)
-    console.log(blog);
+    const sql = 'DELETE FROM posts WHERE id = ?'
 
-    res.sendStatus(204)
+    connection.query(sql, [postId], (err, results) => {
+        if (err) return res.status(500).json({ message: 'Query failed' })
+        if (results.affectedRows === 0) return res.status(404).json({ message: "There's nothing to delete" })
+
+        console.log(results);
+
+        res.sendStatus(204)
+    })
 }
 
 module.exports = {
